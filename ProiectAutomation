@@ -1,0 +1,81 @@
+package ProiectManual;
+
+import javafx.scene.control.ScrollBar;
+import org.junit.Assert;
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import java.util.List;
+import java.util.Random;
+public class ProjectTest {
+    public WebDriver Driver;
+    @Test
+    public void TestManualProject(){
+        System.setProperty("webdriver.chrome.driver", "C:\\AUTOMATION\\chromedriver.exe");
+        Driver = new ChromeDriver();
+        JavascriptExecutor js = (JavascriptExecutor) Driver;
+        Driver.get("https://librariacuidei.ro/");
+        Driver.manage().window().maximize();
+
+        // Home Page Validation
+        String ExpectedHomePageResult = "Acasă - Librariacuidei";
+        String ActualHomePageResult = Driver.getTitle();
+        Assert.assertEquals("Nu suntem pe pagina care trebuie", ExpectedHomePageResult, ActualHomePageResult);
+
+        // Click on User Icon
+        WebElement ClickUserIcon = Driver.findElement(By.xpath(" //span[@class = 'flaticon-user']"));
+        ClickUserIcon.click();
+
+        // LogIn and Registration page Validation
+        String EcpectdRegPageResult = "Contul meu - Librariacuidei";
+        String ActualRegPageResult = Driver.getTitle();
+        Assert.assertEquals("Nu suntem pe pagina care trebuie", EcpectdRegPageResult, ActualRegPageResult);
+
+        // Enter E-mail Address
+        WebElement WriteEmail = Driver.findElement(By.xpath(" //input[@class = 'woocommerce-Input woocommerce-Input--text input-text']"));
+        WriteEmail.sendKeys("gherasimliviugavril@yahoo.com");
+
+        // Enter Password
+        WebElement WritePassword = Driver.findElement(By.id("password"));
+        WritePassword.sendKeys("IL31august2013");
+
+        // LogIn Btn
+        WebElement ClickLogIn = Driver.findElement(By.xpath(" //button[@class= 'woocommerce-Button button']"));
+        ClickLogIn.click();
+
+        // Loged Into Account Validation
+        String ExpectedResultTitleOne = "Contul meu - Librariacuidei";
+        String ActualTitle = Driver.getTitle();
+        Assert.assertEquals("Nu suntem pe pagina care trebuie",ExpectedResultTitleOne,ActualTitle);
+
+        //Click on Magazin Button
+        WebElement MagazinBtnClick = Driver.findElement(By.xpath(" //li[@class= 'menu-item menu-item-type-post_type menu-item-object-megamenu menu-item-4382 parent parent-megamenu item-megamenu menu-item-has-children']"));
+        MagazinBtnClick.click();
+
+        //Magazin web page validation
+        String ExpectedResultTitle = "Shop - Librariacuidei";
+        String ActualTitleA = Driver.getTitle();
+        Assert.assertEquals("Nu suntem pe pagina care trebuie",ExpectedResultTitle,ActualTitleA);
+
+
+         //Select Product
+        WebElement ClickOnProduct = Driver.findElement(By.xpath(" //div[@class = 'add-to-cart-wrap azirspares-add-to-cart-wrap']/a[@data-product_sku = 'lib-pachet-202-1']"));
+        js.executeScript("window.scrollBy(0,1000)");
+        new WebDriverWait(Driver, 5).until(ExpectedConditions.visibilityOf(ClickOnProduct));
+        ClickOnProduct.click();
+
+        //Basket Web Page Validation
+        String ExpectedResultBasket = "Shop - Librariacuidei";
+        String ActualTitleBasket = Driver.getTitle();
+        Assert.assertEquals("Nu suntem pe pagina care trebuie",ExpectedResultBasket,ActualTitleBasket);
+        Driver.close();
+
+    }
+}
